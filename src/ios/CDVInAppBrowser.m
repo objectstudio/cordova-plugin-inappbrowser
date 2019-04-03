@@ -167,7 +167,7 @@
     }
     else {
 		NSString* closeString = NSLocalizedString(@"✕ Done", nil); 
-		[self.inAppBrowserViewController setCloseButtonTitle:closeString];
+		[self.inAppBrowserViewController setCloseButtonTitle:closeString :browserOptions.closebuttoncolor];
 	}
     // Set Presentation Style
     UIModalPresentationStyle presentationStyle = UIModalPresentationFullScreen; // default
