@@ -28,7 +28,7 @@
 #define    kInAppBrowserToolbarBarPositionBottom @"bottom"
 #define    kInAppBrowserToolbarBarPositionTop @"top"
 
-#define    TOOLBAR_HEIGHT 44.0
+#define    TOOLBAR_HEIGHT 25.0
 #define    STATUSBAR_HEIGHT 20.0
 #define    LOCATIONBAR_HEIGHT 21.0
 #define    FOOTER_HEIGHT ((TOOLBAR_HEIGHT) + (LOCATIONBAR_HEIGHT))
@@ -165,6 +165,10 @@
     if (browserOptions.closebuttoncaption != nil || browserOptions.closebuttoncolor != nil) {
         [self.inAppBrowserViewController setCloseButtonTitle:browserOptions.closebuttoncaption :browserOptions.closebuttoncolor];
     }
+    else {
+		NSString* closeString = NSLocalizedString(@"✕ Done", nil); 
+		[self.inAppBrowserViewController setCloseButtonTitle:closeString];
+	}
     // Set Presentation Style
     UIModalPresentationStyle presentationStyle = UIModalPresentationFullScreen; // default
     if (browserOptions.presentationstyle != nil) {
@@ -551,7 +555,7 @@
     [self.view sendSubviewToBack:self.webView];
 
     self.webView.delegate = _webViewDelegate;
-    self.webView.backgroundColor = [UIColor whiteColor];
+    self.webView.backgroundColor = [UIColor blackColor];
 
     self.webView.clearsContextBeforeDrawing = YES;
     self.webView.clipsToBounds = YES;
@@ -649,11 +653,11 @@
     self.backButton.imageInsets = UIEdgeInsetsZero;
 
     // Filter out Navigation Buttons if user requests so
-    if (_browserOptions.hidenavigationbuttons) {
-      [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
-    } else {
-      [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
-    }
+    // if (_browserOptions.hidenavigationbuttons) {
+    //   [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
+    // } else {
+    //   [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
+    // }
     [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton]];
 
     self.view.backgroundColor = [UIColor grayColor];
@@ -673,10 +677,12 @@
     // but, if you want to set this yourself, knock yourself out (we can't set the title for a system Done button, so we have to create a new one)
     self.closeButton = nil;
     // Initialize with title if title is set, otherwise the title will be 'Done' localized
-    self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(close)] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
+    // self.closeButton = title != nil ? [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleBordered target:self action:@selector(close)] : [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
+    self.closeButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemStop target:self action:@selector(close)];
     self.closeButton.enabled = YES;
     // If color on closebutton is requested then initialize with that that color, otherwise use initialize with default
-    self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
+    // self.closeButton.tintColor = colorString != nil ? [self colorFromHexString:colorString] : [UIColor colorWithRed:60.0 / 255.0 green:136.0 / 255.0 blue:230.0 / 255.0 alpha:1];
+    self.closeButton.tintColor = [UIColor colorWithRed:255.0 / 255.0 green:255.0 / 255.0 blue:255.0 / 255.0 alpha:1];
 
     NSMutableArray* items = [self.toolbar.items mutableCopy];
     [items replaceObjectAtIndex:0 withObject:self.closeButton];
@@ -813,7 +819,8 @@
 }
 
 - (BOOL)prefersStatusBarHidden {
-    return NO;
+    // return NO;
+    return YES;
 }
 
 - (void)close
@@ -879,9 +886,10 @@
 // change that value.
 //
 - (float) getStatusBarOffset {
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    float statusBarOffset = IsAtLeastiOSVersion(@"7.0") ? MIN(statusBarFrame.size.width, statusBarFrame.size.height) : 0.0;
-    return statusBarOffset;
+    // CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
+    // float statusBarOffset = IsAtLeastiOSVersion(@"7.0") ? MIN(statusBarFrame.size.width, statusBarFrame.size.height) : 0.0;
+    // return statusBarOffset;
+    return 0.0;
 }
 
 - (void) rePositionViews {
@@ -1078,14 +1086,14 @@
 
 - (void) viewDidLoad {
 
-    CGRect statusBarFrame = [self invertFrameIfNeeded:[UIApplication sharedApplication].statusBarFrame];
-    statusBarFrame.size.height = STATUSBAR_HEIGHT;
+    // CGRect statusBarFrame = [self invertFrameIfNeeded:[UIApplication sharedApplication].statusBarFrame];
+    // statusBarFrame.size.height = STATUSBAR_HEIGHT;
     // simplified from: http://stackoverflow.com/a/25669695/219684
 
-    UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:statusBarFrame];
-    bgToolbar.barStyle = UIBarStyleDefault;
-    [bgToolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
-    [self.view addSubview:bgToolbar];
+    // UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:statusBarFrame];
+    // bgToolbar.barStyle = UIBarStyleDefault;
+    // [bgToolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
+    // [self.view addSubview:bgToolbar];
 
     [super viewDidLoad];
 }
